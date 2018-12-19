@@ -1,0 +1,6 @@
+lib/bs/
+node_modules/
+test/
+.vscode/
+.merlin
+package-lock.json
