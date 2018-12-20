@@ -18,6 +18,9 @@
     "clean": "bsb -clean-world",
     "test": "npm run clean && npm run build && mocha"
   },
+  "dependencies": {
+    "winston": "^3.1.0"
+  },
   "peerDependencies": {
     "bs-platform": ">= 4.0.8"
   },
