@@ -20,7 +20,7 @@ let levelStr: level => string =
 
 module Config {
 
-  module Transports {
+  module Transport {
     type t;
 
     module Console {
@@ -55,12 +55,12 @@ module Config {
   type t = {
     [@bs.optional] level: string,
     [@bs.optional] format: Format.t,
-    transports: array(Transports.t),
+    transports: array(Transport.t),
     [@bs.optional] silent: bool
   };
 
   module Builder {
-    let create: Transports.t => t =
+    let create: Transport.t => t =
       transport =>
         t(~transports=[|transport|], ());
     
@@ -81,7 +81,7 @@ module Config {
         t(~level=?levelGet(config), ~format=fmt, ~transports=transportsGet(config), ~silent=?silentGet(config), ());
       };
 
-    let addTransport: t => Transports.t => t =
+    let addTransport: t => Transport.t => t =
       (config, transport) =>
         t(~level=?levelGet(config), ~format=?formatGet(config), ~transports=Belt.Array.concat(transportsGet(config), [|transport|]), ~silent=?silentGet(config), ());
   };

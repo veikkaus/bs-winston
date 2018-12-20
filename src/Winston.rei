@@ -12,7 +12,7 @@ type level =
 module Config {
   type t;
 
-  module Transports {
+  module Transport {
     type t;
 
     module Console {
@@ -33,19 +33,19 @@ module Config {
   };
 
   module Builder {
-    let create: Transports.t => t;
+    let create: Transport.t => t;
 
     let setLevel: t => level => t;
     let setSilent: t => bool => t;
     let addFormat: t => Format.t => t;
-    let addTransport: t => Transports.t => t
+    let addTransport: t => Transport.t => t
   };
 };
 
 /**
  * Example:
  * module ConfigBuilder = Winston.Config.Builder;
- * let consoleTransport = Winston.Config.Transports.Console.createDefault();
+ * let consoleTransport = Winston.Config.Transport.Console.createDefault();
  * let winstonConfig = ConfigBuilder.create(consoleTransport) -> ConfigBuilder.setLevel(Debug);
  * let logger = Winston.createLogger(winstonConfig);
  */
