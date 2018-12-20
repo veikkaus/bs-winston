@@ -102,7 +102,7 @@ let log: t => Js.Json.t => unit =
       let keys = obj -> Js.Dict.keys;
       let copy = obj -> Js.Dict.entries -> Js.Dict.fromArray;
       if (!Js.Array.includes("level", keys)) Js.Dict.set(copy, "level", Info -> levelStr -> Js.Json.string);
-      if (Js.Array.includes("message", keys)) Js.Dict.set(copy, "message", Js.Json.string(""));
+      if (!Js.Array.includes("message", keys)) Js.Dict.set(copy, "message", Js.Json.string(""));
       logExternal(logger, Js.Json.object_(copy));
     }
     | _ => invalid_arg("content")
