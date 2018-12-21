@@ -8,7 +8,7 @@ type config = {
   [@bs.optional] silent: bool
 };
 
-[@bs.val] [@bs.module "winston"] external createLoggerExternal: config => u = "createLogger";
+[@bs.module "winston"] external createLoggerExternal: config => u = "createLogger";
 [@bs.send] external logExternal: u => Js.Json.t => unit = "log";
 
 type content = {
