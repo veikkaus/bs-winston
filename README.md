@@ -41,8 +41,8 @@ The logger content is immutable so you can do this:
 /*prefixed logger:*/
 let logger2 = logger -> withMessage("Prefixed always:");
 
-logger2 -> logInfoMsg("Hello!"); /* >> INFO Prefixed always: Hello! */
-logger2 -> logWarnMsg("Also!");  /* >> WARN Prefixed always: Also! */
+logger2 -> logInfoMsg("Hello!");   /* info: Prefixed always: Hello! */
+logger2 -> logWarnMsg("Me too!");  /* warn: Prefixed always: Me too! */
 ```
 because `withMessage` creates a new logger where the message is concatenated to the message of the previous logger.
 
