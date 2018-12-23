@@ -9,15 +9,11 @@ module Console {
     [@bs.optional] stderrLevels: array(string),
     [@bs.optional] consoleWarnLevels: array(string)
   };
-  let newConsoleTransport: (. config) => t = [%bs.raw {|
-    function (config) {
-      return new (require('winston').transports).Console(config);
-    }
-  |}];
+  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newConsoleTransport: config => t = "Console";
 
   let create =
     (~level=?, ~silent=?, ~eol=?, ~stderrLevels=?, ~consoleWarnLevels=?, ()) =>
-      newConsoleTransport(. config(
+      newConsoleTransport(config(
         ~level =? level,
         ~silent =? silent,
         ~eol =? eol,
@@ -26,10 +22,11 @@ module Console {
         ()
       ));
 };
+let createConsole = Console.create;
 
 module File {
   [@bs.deriving abstract]
-  type config = {
+  type config('a) = {
     [@bs.optional] level: string,
     [@bs.optional] silent: bool,
     [@bs.optional] eol: string,
@@ -39,17 +36,13 @@ module File {
     [@bs.optional] tailable: bool,
     [@bs.optional] maxRetries: int,
     [@bs.optional] zippedArchive: bool,
-    [@bs.optional] options: Js.t({.})
+    [@bs.optional] options: Js.t('a)
   };
-  let newFileTransport: (. config) => t = [%bs.raw {|
-    function (config) {
-      return new (require('winston').transports).File(config);
-    }
-  |}];
+  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newFileTransport: config('a) => t = "File";
 
   let create =
     (~level=?, ~silent=?, ~eol=?, ~filename=?, ~maxsize=?, ~maxFiles=?, ~tailable=?, ~maxRetries=?, ~zippedArchive=?, ~options=?, ()) =>
-      newFileTransport(. config(
+      newFileTransport(config(
         ~level =? level,
         ~silent =? silent,
         ~eol =? eol,
@@ -63,25 +56,22 @@ module File {
         ()
       ));
 };
+let createFile = File.create;
 
 module Http {
   [@bs.deriving abstract]
-  type config = {
+  type config('a) = {
     [@bs.optional] host: string,
     [@bs.optional] port: int,
     [@bs.optional] path: string,
-    [@bs.optional] auth: Js.t({.}),
+    [@bs.optional] auth: Js.t('a),
     [@bs.optional] ssl: bool
   };
-  let newHttpTransport: (. config) => t = [%bs.raw {|
-    function (config) {
-      return new (require('winston').transports).Http(config);
-    }
-  |}];
+  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newHttpTransport: config('a) => t = "Http";
 
   let create =
     (~host=?, ~port=?, ~path=?, ~auth=?, ~ssl=?, ()) =>
-      newHttpTransport(. config(
+      newHttpTransport(config(
         ~host =? host,
         ~port =? port,
         ~path =? path,
@@ -90,24 +80,21 @@ module Http {
         ()
       ));
 };
+let createHttp = Http.create;
 
 module Stream {
   [@bs.deriving abstract]
-  type config = {
+  type config('a) = {
     [@bs.optional] level: string,
     [@bs.optional] silent: bool,
     [@bs.optional] eol: string,
-    [@bs.optional] stream: Js.t({.})
+    [@bs.optional] stream: 'a
   };
-  let newStreamTransport: (. config) => t = [%bs.raw {|
-    function (config) {
-      return new (require('winston').transports).Stream(config);
-    }
-  |}];
+  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newStreamTransport: config('a) => t = "Stream";
 
   let create =
     (~level=?, ~silent=?, ~eol=?, ~stream=?, ()) =>
-      newStreamTransport(. config(
+      newStreamTransport(config(
         ~level =? level,
         ~silent =? silent,
         ~eol =? eol,
@@ -115,3 +102,4 @@ module Stream {
         ()
       ));
 };
+let createStream = Stream.create;

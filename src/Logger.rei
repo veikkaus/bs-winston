@@ -1,18 +1,14 @@
 type t;
 
 let create: (
-  ~level: string = ?,
-  ~format: Format.t = ?,
+  ~level: string =?,
+  ~format: Format.t =?,
   ~transports: list(Transport.t),
-  ~silent: bool = ?,
+  ~silent: bool =?,
+  ~errorKey: string =?,
+  ~jsonKey: string =?,
   unit
 ) => t;
-
-/*
-
- logger -> error -> withMessage("foo") -> withExn(e) -> log;
- logger -> warn -> withJson(xxx) -> log;
- */
 
 let error:   t => t;
 let warn:    t => t;
@@ -26,3 +22,11 @@ let withExn:     t => exn => t;
 let withJson:    t => Js.Json.t => t;
 
 let log: t => unit;
+
+
+/* Common combinations abbreviated for usage convenience */
+let logErrorMsg: t => string => unit;
+let logErrorExn: t => string => exn => unit;
+let logWarnMsg:  t => string => unit;
+let logInfoMsg:  t => string => unit;
+let logDebugMsg: t => string => unit;

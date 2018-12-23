@@ -26,15 +26,15 @@ type t = {
 };
 
 let create =
-  (~level=?, ~format=?, ~transports, ~silent=?, ()) => ({
+  (~level=?, ~format=?, ~transports, ~silent=?, ~errorKey=?, ~jsonKey=?, ()) => ({
     logger: createLoggerExternal(config(~level=?level, ~format=?format, ~transports=Belt.List.toArray(transports), ~silent=?silent, ())),
     content: {
       level: "silly",
       message: "",
       error: None,
-      errorKey: "error",
+      errorKey: Belt.Option.getWithDefault(errorKey, "error"),
       json: None,
-      jsonKey: "json"
+      jsonKey: Belt.Option.getWithDefault(jsonKey, "json")
     }
   });
 
@@ -93,3 +93,11 @@ let log =
     Js.Dict.set(m, "level", Js.Json.string(obj.content.level));
     logExternal(obj.logger, Js.Json.object_(m));
   };
+
+
+/* Common combinations abbreviated for usage convenience */
+let logErrorMsg = (logger, msg) => logger -> error -> withMessage(msg) -> log;
+let logErrorExn = (logger, msg, e) => logger -> error -> withMessage(msg) -> withExn(e) -> log;
+let logWarnMsg = (logger, msg) => logger -> warn -> withMessage(msg) -> log;
+let logInfoMsg = (logger, msg) => logger -> info -> withMessage(msg) -> log;
+let logDebugMsg = (logger, msg) => logger -> debug -> withMessage(msg) -> log;
