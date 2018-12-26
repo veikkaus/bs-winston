@@ -113,6 +113,11 @@ Create winston formats with functions:
 
 See the [src/Format.rei](https://github.com/veikkaus/bs-winston/blob/master/src/Format.rei) file for function argument details and the [logform](https://github.com/winstonjs/logform) for further explanations.
 
+Simple custom filters (without Symbol manipulation) can be created with:
+- `fromMapFn: (Js.Dict.t(Js.Json.t) => Js.Dict.t(Js.Json.t)) => t`
+
+  The function given as argument takes the info object and returns manipulated info object which is then forwarded in the formatting chain.
+
 ## Transport <small>(module `BsWinston.Transport`)</small>
 
 Create winston transports with functions:
