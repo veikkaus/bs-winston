@@ -73,3 +73,5 @@ let createUncolorize: (
   ~raw: bool =?,
   unit
 ) => t;
+
+let fromMapFn: (Js.Dict.t(Js.Json.t) => Js.Dict.t(Js.Json.t)) => t;

@@ -17,7 +17,7 @@ let verbose: t => t;
 let debug:   t => t;
 let silly:   t => t;
 
-let withMessage: t => string => t;  /* or use 'a and enforce with Js.String.make() ? */
+let withMessage: t => 'a => t;
 let withExn:     t => exn => t;
 let withJson:    t => Js.Json.t => t;
 
@@ -25,8 +25,8 @@ let log: t => unit;
 
 
 /* Common combinations abbreviated for usage convenience */
-let logErrorMsg: t => string => unit;
-let logErrorExn: t => string => exn => unit;
-let logWarnMsg:  t => string => unit;
-let logInfoMsg:  t => string => unit;
-let logDebugMsg: t => string => unit;
+let logErrorMsg: t => 'a => unit;
+let logErrorExn: t => 'a => exn => unit;
+let logWarnMsg:  t => 'a => unit;
+let logInfoMsg:  t => 'a => unit;
+let logDebugMsg: t => 'a => unit;

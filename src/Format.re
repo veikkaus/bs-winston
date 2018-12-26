@@ -147,3 +147,19 @@ module Uncolorize {
     (~level=?, ~message=?, ~raw=?, ()) => uncolorizeExt(config(~level=?level, ~message=?message, ~raw=?raw, ()));
 };
 let createUncolorize = Uncolorize.create;
+
+type fnX = unit => t;
+[@bs.module "winston"] external formatExt: (Js.Dict.t(Js.Json.t) => Js.Dict.t(Js.Json.t)) => fnX = "format";
+
+let fromMapFn: (Js.Dict.t(Js.Json.t) => Js.Dict.t(Js.Json.t)) => t =
+  fn => {
+    /* We have to mutate the original obj in order to preserve magical members (Symbols etc.): */
+    let wrapper = obj => {
+      let res = fn(obj);
+      res -> Js.Dict.entries -> Belt.Array.forEach(((key, value)) => {
+        Js.Dict.set(obj, key, value)
+      });
+      obj;
+    };
+    formatExt(wrapper)(());
+  };

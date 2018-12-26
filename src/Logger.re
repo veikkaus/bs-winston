@@ -53,7 +53,7 @@ let silly = obj => level(obj, "silly");
 let withMessage =
   (obj, msg) => ({
     logger: obj.logger,
-    content: {...obj.content, message: Js.String.trim(obj.content.message ++ " " ++ msg)}
+    content: {...obj.content, message: Js.String.trim(obj.content.message ++ " " ++ Js.String.make(msg))}
   });
 
 let withExn =

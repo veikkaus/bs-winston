@@ -1,6 +1,6 @@
 {
   "name": "bs-winston",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "sources": [
     {
       "dir" : "src",
@@ -18,7 +18,8 @@
   "suffix": ".bs.js",
   "bs-dependencies": [],
   "bs-dev-dependencies": [
-    "bs-mocha"
+    "bs-mocha",
+    "bs-yarp"
   ],
   "warnings": {
     "error" : "+101"

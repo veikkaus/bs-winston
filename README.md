@@ -60,9 +60,9 @@ because `withMessage` creates a new logger where the message is concatenated to 
   
   The functions do not mutate but rather create a new logger with the requested level.
 - Combinators:
-  - `withMessage: t => string => t`
+  - `withMessage: t => 'a => t`
     
-    Combines the message (2nd arg) string with the possible message in the logger (1st arg) (with one space " " in between to avoid clumping)
+    Converts the message (2nd arg) into string (with Js.String.make) and combines it with the possible message in the logger (1st arg) (with one space " " in between to avoid clumping)
   - `withExn: t => exn => t`
     
     Converts the exception to Js.Json.t if it is Js.Exn.t or just stringifies other ocaml exceptions and sets the result to a field ("error" by default) which can be defined on logger options. (This function does not combine with itself i.e. latter usage overwrites the previous)
