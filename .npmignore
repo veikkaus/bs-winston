@@ -5,4 +5,3 @@ test/
 .merlin
 package-lock.json
 src/**/*.bs.js
-test/**/*.bs.js

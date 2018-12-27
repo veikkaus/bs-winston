@@ -127,3 +127,6 @@ Create winston transports with functions:
 - `createStream`
 
 See the [src/Transport.rei](https://github.com/veikkaus/bs-winston/blob/master/src/Transport.rei) file for function argument details and the [winston](https://github.com/winstonjs/winston/blob/master/docs/transports.md#winston-core) for further explanations.
+
+Other transports:
+- [AWS Cloudwatch](https://github.com/seprich/bs-winston-cloudwatch)
