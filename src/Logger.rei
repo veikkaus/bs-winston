@@ -6,7 +6,6 @@ let create: (
   ~transports: list(Transport.t),
   ~silent: bool =?,
   ~errorKey: string =?,
-  ~jsonKey: string =?,
   unit
 ) => t;
 
@@ -19,7 +18,7 @@ let silly:   t => t;
 
 let withMessage: t => 'a => t;
 let withExn:     t => exn => t;
-let withJson:    t => Js.Json.t => t;
+let withJson:    t => string => Js.Json.t => t;
 
 let log: t => unit;
 

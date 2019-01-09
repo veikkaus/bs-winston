@@ -11,8 +11,7 @@ type t = {
   formats: list(Format.t),
   transports: list(Transport.t),
   silent: option(bool),
-  errorKey: option(string),
-  jsonKey: option(string)
+  errorKey: option(string)
 };
 
 let levelStr: level => string =
@@ -25,7 +24,7 @@ let levelStr: level => string =
     | Silly => "silly"
   };
 
-let create = () => ({level: None, formats: [], transports: [], silent: None, errorKey: None, jsonKey: None});
+let create = () => ({level: None, formats: [], transports: [], silent: None, errorKey: None});
 
 let setLevel = (builder, lvl) => ({...builder, level: Some(lvl)});
 
@@ -36,8 +35,6 @@ let addFormat = (builder, format) => ({...builder, formats: [format, ...builder.
 let addTransport = (builder, transport) => ({...builder, transports: [transport, ...builder.transports]});
 
 let setErrorKey = (builder, key) => ({...builder, errorKey: Some(key)});
-
-let setJsonKey = (builder, key) => ({...builder, jsonKey: Some(key)});
 
 let aggregateFormats: list(Format.t) => option(Format.t) =
   formats => switch (Belt.List.length(formats)) {
@@ -54,6 +51,5 @@ let build =
       ~transports = builder.transports -> Belt.List.reverse,
       ~silent =? builder.silent,
       ~errorKey =? builder.errorKey,
-      ~jsonKey =? builder.jsonKey,
       ()
     );

@@ -66,9 +66,9 @@ because `withMessage` creates a new logger where the message is concatenated to 
   - `withExn: t => exn => t`
     
     Converts the exception to Js.Json.t if it is Js.Exn.t or just stringifies other ocaml exceptions and sets the result to a field ("error" by default) which can be defined on logger options. (This function does not combine with itself i.e. latter usage overwrites the previous)
-  - `withJson: t => Js.Json.t => t`
+  - `withJson: t => string => Js.Json.t => t`
 
-    Sets the json to a field ("json" by default) which can be defined on logger options. (This function does not combine with itself i.e. latter usage overwrites the previous)
+    Sets the json to a field named with the string parameter.
 - Output
   - `log: t => unit`  - Produce the side-effect - logging - from the given logger content.
 - Convenience functions to make some common use cases less verbose:
@@ -76,7 +76,7 @@ because `withMessage` creates a new logger where the message is concatenated to 
   - `logErrorExn` = `(arg1, arg2, e) => arg1 -> error -> withMessage(arg2) -> withExn(e) -> log`
   - `logWarnMsg`  = `(arg1, arg2) => arg1 -> warn -> withMessage(arg2) -> log`
   - `logInfoMsg`  = `(arg1, arg2) => arg1 -> info -> withMessage(arg2) -> log`
-  - `logDebugMsg`  = `(arg1, arg2) => arg1 -> debug -> withMessage(arg2) -> log`
+  - `logDebugMsg` = `(arg1, arg2) => arg1 -> debug -> withMessage(arg2) -> log`
 
 
 ## Builder <small>(module `BsWinston.Builder`)</small>
@@ -89,7 +89,6 @@ Loggers can be build either with Builder functions or directly with `Logger.crea
 - `addFormat: t => Format.t => t`  (See Formats) (The list will be auto-combined for winston)
 - `addTransport: t => Transport.t => t` (See Transports)
 - `errorKey: t => string => t` Set field for error content
-- `jsonKey: t => string => t` Set field for json content
 - `build: t => Logger.t` Create the logger instance.
 
 ## Format <small>(module `BsWinston.Format`)</small>
@@ -129,4 +128,4 @@ Create winston transports with functions:
 See the [src/Transport.rei](https://github.com/veikkaus/bs-winston/blob/master/src/Transport.rei) file for function argument details and the [winston](https://github.com/winstonjs/winston/blob/master/docs/transports.md#winston-core) for further explanations.
 
 Other transports:
-- [AWS Cloudwatch](https://github.com/seprich/bs-winston-cloudwatch)
+- [AWS Cloudwatch](https://github.com/veikkaus/bs-winston-cloudwatch)

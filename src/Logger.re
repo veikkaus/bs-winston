@@ -16,8 +16,7 @@ type content = {
   message: string,
   error: option(exn),
   errorKey: string,
-  json: option(Js.Json.t),
-  jsonKey: string
+  json: list((string, Js.Json.t))
 };
 
 type t = {
@@ -26,15 +25,14 @@ type t = {
 };
 
 let create =
-  (~level=?, ~format=?, ~transports, ~silent=?, ~errorKey=?, ~jsonKey=?, ()) => ({
+  (~level=?, ~format=?, ~transports, ~silent=?, ~errorKey=?, ()) => ({
     logger: createLoggerExternal(config(~level=?level, ~format=?format, ~transports=Belt.List.toArray(transports), ~silent=?silent, ())),
     content: {
       level: "silly",
       message: "",
       error: None,
       errorKey: Belt.Option.getWithDefault(errorKey, "error"),
-      json: None,
-      jsonKey: Belt.Option.getWithDefault(jsonKey, "json")
+      json: []
     }
   });
 
@@ -63,9 +61,9 @@ let withExn =
   });
 
 let withJson =
-  (obj, json) => ({
+  (obj, key, json) => ({
     logger: obj.logger,
-    content: {...obj.content, json: Some(json)}
+    content: {...obj.content, json: [(key, json), ...obj.content.json]}
   });
 
 let jsExnToJson: Js.Exn.t => Js.Json.t =
@@ -87,9 +85,9 @@ let exnToJson: exn => Js.Json.t =
 let log =
   obj => {
     let m: Js.Dict.t(Js.Json.t) = Js.Dict.empty();
-    Belt.Option.map(obj.content.json, json => Js.Dict.set(m, obj.content.jsonKey, json)) |> ignore;
     Belt.Option.map(obj.content.error, error => Js.Dict.set(m, obj.content.errorKey, exnToJson(error))) |> ignore;
     Js.Dict.set(m, "message", Js.Json.string(obj.content.message));
+    Belt.List.forEach(obj.content.json, ((key, json)) => Js.Dict.set(m, key, json));
     Js.Dict.set(m, "level", Js.Json.string(obj.content.level));
     logExternal(obj.logger, Js.Json.object_(m));
   };
