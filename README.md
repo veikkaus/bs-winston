@@ -15,7 +15,7 @@ And to `bsconfig.json`: `"bs-dependencies": [..., "bs-winston", ...]`
 
 # Examples
 Initialize/Setup a logger e.g. in MyLogger.re you write:
-```reasonml
+```ocaml
 module Format = BsWinston.Format;
 module Transport = BsWinston.Transport;
 
@@ -29,7 +29,7 @@ let logger =
 ```
 
 Use the logger above in another module:
-```reasonml
+```ocaml
 module L = BsWinston.Logger;
 let logger = MyLogger.logger;
 
@@ -74,13 +74,15 @@ logger
 
     Sets the json to a field named with the string parameter.
 - Output
-  - `log: t => unit`  - Produce the side-effect - logging - from the given logger content.
+  - `log: t => unit`
+
+    Produces the side-effect of logging to the logger transport.
 - Convenience functions to make some common use cases less verbose:
-  - `logErrorMsg` = `(arg1, arg2) => arg1 -> error -> withMessage(arg2) -> log`
-  - `logErrorExn` = `(arg1, arg2, e) => arg1 -> error -> withMessage(arg2) -> withExn(e) -> log`
-  - `logWarnMsg`  = `(arg1, arg2) => arg1 -> warn -> withMessage(arg2) -> log`
-  - `logInfoMsg`  = `(arg1, arg2) => arg1 -> info -> withMessage(arg2) -> log`
-  - `logDebugMsg` = `(arg1, arg2) => arg1 -> debug -> withMessage(arg2) -> log`
+  - `logErrorMsg` = `(logger, msg) => logger -> error -> withMessage(msg) -> log`
+  - `logErrorExn` = `(logger, msg, error) => logger -> error -> withMessage(msg) -> withExn(error) -> log`
+  - `logWarnMsg`  = `(logger, msg) => logger -> warn -> withMessage(msg) -> log`
+  - `logInfoMsg`  = `(logger, msg) => logger -> info -> withMessage(msg) -> log`
+  - `logDebugMsg` = `(logger, msg) => logger -> debug -> withMessage(msg) -> log`
 
 
 ## Builder <small>(module `BsWinston.Builder`)</small>
