@@ -1,6 +1,6 @@
 {
   "name": "bs-winston",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Winston for ReasonML",
   "author": "Kundi team - Veikkaus",
   "license": "MIT",
@@ -19,14 +19,14 @@
     "test": "npm run clean && npm run build && mocha"
   },
   "dependencies": {
-    "winston": "3.1.0"
+    "winston": "3.2.1"
   },
   "peerDependencies": {
-    "bs-platform": ">= 4.0.8"
+    "bs-platform": ">= 5.0.0"
   },
   "devDependencies": {
-    "bs-mocha": "0.4.0",
-    "bs-platform": "4.0.14",
+    "bs-mocha": "1.0.0",
+    "bs-platform": "5.0.6",
     "bs-yarp": "0.3.1",
     "winston-transport": "4.3.0"
   }
