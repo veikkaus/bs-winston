@@ -4,6 +4,7 @@
 
 This is adapter of [winston](https://github.com/winstonjs/winston) for ReasonML. Because ReasonML is significantly different from js the API here is decidedly different from vanilla winston API. See the API section and examples below.
 
+
 # Install 
 
 ```
@@ -13,38 +14,41 @@ And to `bsconfig.json`: `"bs-dependencies": [..., "bs-winston", ...]`
 
 
 # Examples
-
-Minimal console logger:
-```
-module Builder = BsWinston.Builder;
+Initialize/Setup a logger e.g. in MyLogger.re you write:
+```reasonml
 module Format = BsWinston.Format;
 module Transport = BsWinston.Transport;
 
 let logger =
-  Builder.create()
-  -> Builder.setLevel(Builder.Debug)
-  -> Builder.addFormat(Format.createSimple())
-  -> Builder.addTransport(Transport.createConsole(()))
-  -> Builder.build;
-
-
-/* Using the logger: */
-
-open BsWinston.Logger;
-
-logger -> error -> withMessage("Some error happened") -> log;
-logger -> logDebugMsg("Abbreviation for logging a message at debug level");
+  BsWinston.Builder.(
+    create()
+    -> setLevel(Debug)
+    -> addFormat(Format.createSimple())
+    -> addTransport(Transport.createConsole(()))
+    -> build);
 ```
 
-The logger content is immutable so you can do this:
-```
-/*prefixed logger:*/
-let logger2 = logger -> withMessage("Prefixed always:");
+Use the logger above in another module:
+```reasonml
+module L = BsWinston.Logger;
+let logger = MyLogger.logger;
 
-logger2 -> logInfoMsg("Hello!");   /* info: Prefixed always: Hello! */
-logger2 -> logWarnMsg("Me too!");  /* warn: Prefixed always: Me too! */
+L.logInfoMsg(logger, "This is info message");
+L.logWarnMsg(logger, "This messege is sent at warn level");
+
+try (Js.Exn.raiseError("log this")) {
+  | error => L.logErrorExn(logger, "Never fails to fail", error)
+}
+
+/* In a complicated case you may want to send extra json keys. It is possible: */
+logger
+-> L.info
+-> L.withMessage("the usual")
+-> L.withJson("keyX", Js.Json.string("valueX"))
+-> L.withJson("keyY", Js.Json.number(float_of_int(42)))
+-> L.log;
 ```
-because `withMessage` creates a new logger where the message is concatenated to the message of the previous logger.
+
 
 # API
 
