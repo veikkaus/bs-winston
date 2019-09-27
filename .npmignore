@@ -1,7 +1,8 @@
-lib/bs/
-node_modules/
-test/
-.vscode/
+/node_modules/
+/lib/
+yarn.lock
+.bsb.lock
 .merlin
-package-lock.json
-src/**/*.bs.js
+
+/test/
+.vscode/
