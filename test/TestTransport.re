@@ -1,5 +1,3 @@
-open BsYarp;
-
 [%%bs.raw {|
 
 var WinstonTransportJS = require("winston-transport");
@@ -32,17 +30,17 @@ let createTestTransportJS: currentCallback => Transport.t = [%bs.raw {|
   }
 |}]
 
-let createPromiseWithCb: currentCallback => unit => Promise.t(string) =
+let createFutureWithCb: currentCallback => unit => Future.t(Belt.Result.t(string, exn)) =
   (currentCallback, ()) =>
-    Promise.make(resolve => {
+    Future.make(resolve => {
       let setter = strVal => resolve(Belt.Result.Ok(strVal));
       setResultSet(currentCallback, setter);
     });
 
-let create: unit => (Transport.t, (unit => Promise.t(string))) =
+let create: unit => (Transport.t, (unit => Future.t(Belt.Result.t(string, exn)))) =
   () => {
     let currentCallback = currentCallback(~setResult=(_ => {()}));
-    let createFn = createPromiseWithCb(currentCallback);
+    let createFn = createFutureWithCb(currentCallback);
     let transport = createTestTransportJS(currentCallback);
     (transport, createFn);
   };
