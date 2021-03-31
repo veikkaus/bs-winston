@@ -51,7 +51,7 @@ let silly = obj => level(obj, "silly");
 let withMessage =
   (obj, msg) => ({
     logger: obj.logger,
-    content: {...obj.content, message: Js.String.trim(obj.content.message ++ " " ++ Js.String.make(msg))}
+    content: {...obj.content, message: Js.String2.trim(obj.content.message ++ " " ++ Js.String2.make(msg))}
   });
 
 let withExn =
@@ -79,7 +79,10 @@ let jsExnToJson: Js.Exn.t => Js.Json.t =
 let exnToJson: exn => Js.Json.t =
   error => switch (Js.Exn.asJsExn(error)) {
     | Some(error) => jsExnToJson(error)
-    | None => Js.Json.string(Js.String.make(error))
+    | None => switch (Js.Json.stringifyAny(error)) {
+      | Some(content) => Js.Json.string(content)
+      | None => Js.Json.string(Js.String2.make(error))
+    }
   };
 
 let log =

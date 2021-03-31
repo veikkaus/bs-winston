@@ -24,7 +24,7 @@ let createTestLogger2 =
      createResultFuture);
   };
 
-let testResult: (unit => unit) => Future.t(Belt.Result.t(string, exn)) => string => unit =
+let testResult: ((~error: Js.Exn.t=?, unit) => unit) => Future.t(Belt.Result.t(string, exn)) => string => unit =
   (done_, future, expected) =>
     future
     -> Future.mapOk(res => {
@@ -84,7 +84,7 @@ describe("Basic Logging", () => {
 
       let resultFuture = createResultFuture();
       logger -> logErrorExn("My context", error);
-      testResult(done_, resultFuture, {js|{"error":"BasicsTest-BsWinston.TestException,2,testing","message":"My context","level":"error"}|js});
+      testResult(done_, resultFuture, {js|{"error":"{\\"RE_EXN_ID\\":\\"BasicsTest-BsWinston.TestException/2\\",\\"_1\\":\\"testing\\"}","message":"My context","level":"error"}|js});
     });
 
     it("should log Js.Exn.t errors", done_ => {
