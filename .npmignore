@@ -6,3 +6,4 @@ yarn.lock
 
 /test/
 .vscode/
+.github/
