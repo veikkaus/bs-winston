@@ -1,6 +1,6 @@
 {
   "name": "bs-winston",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Winston for ReasonML",
   "author": "Kundi team - Veikkaus",
   "license": "MIT",
