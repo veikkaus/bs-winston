@@ -1,45 +1,48 @@
-[%%bs.raw {|
+[%mel.raw
+  {|
+  var WinstonTransportJS = require("winston-transport");
 
-var WinstonTransportJS = require("winston-transport");
-
-class TestTransportJS extends WinstonTransportJS {
-  constructor(cbObj, opts) {
-    super(opts);
-    this.cbObj = cbObj;
-  }
-
-  log(info, callback) {
-    setImmediate(() => this.emit('logged', info));
-    var MESSAGE = Symbol.for("message");
-    this.cbObj.setResult(String(info[MESSAGE]));
-    if (callback) {
-      callback(); // eslint-disable-line callback-return
+  class TestTransportJS extends WinstonTransportJS {
+    constructor(cbObj, opts) {
+      super(opts);
+      this.cbObj = cbObj;
     }
-  }
-};
-|}];
 
-[@bs.deriving abstract]
-type currentCallback = {
-  mutable setResult: string => unit
-};
+    log(info, callback) {
+      setImmediate(() => this.emit('logged', info));
+      var MESSAGE = Symbol.for("message");
+      this.cbObj.setResult(String(info[MESSAGE]));
+      if (callback) {
+        callback(); // eslint-disable-line callback-return
+      }
+    }
+  };
+|}
+];
 
-let createTestTransportJS: currentCallback => Transport.t = [%bs.raw {|
+[@deriving abstract]
+type currentCallback = {mutable setResult: string => unit};
+
+let createTestTransportJS: currentCallback => Transport.t = [%mel.raw
+  {|
   function (cbObj) {
     return new TestTransportJS(cbObj);
   }
-|}]
+|}
+];
 
-let createFutureWithCb: currentCallback => unit => Future.t(Belt.Result.t(string, exn)) =
+let createFutureWithCb:
+  (currentCallback, unit) => Future.t(Belt.Result.t(string, exn)) =
   (currentCallback, ()) =>
     Future.make(resolve => {
       let setter = strVal => resolve(Belt.Result.Ok(strVal));
       setResultSet(currentCallback, setter);
     });
 
-let create: unit => (Transport.t, (unit => Future.t(Belt.Result.t(string, exn)))) =
+let create:
+  unit => (Transport.t, unit => Future.t(Belt.Result.t(string, exn))) =
   () => {
-    let currentCallback = currentCallback(~setResult=(_ => {()}));
+    let currentCallback = currentCallback(~setResult=_ => {()});
     let createFn = createFutureWithCb(currentCallback);
     let transport = createTestTransportJS(currentCallback);
     (transport, createFn);

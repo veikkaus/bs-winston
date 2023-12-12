@@ -1,105 +1,135 @@
 type t;
 
-module Console {
-  [@bs.deriving abstract]
+module Console = {
+  [@deriving abstract]
   type config = {
-    [@bs.optional] level: string,
-    [@bs.optional] silent: bool,
-    [@bs.optional] eol: string,
-    [@bs.optional] stderrLevels: array(string),
-    [@bs.optional] consoleWarnLevels: array(string)
+    [@mel.optional]
+    level: option(string),
+    [@mel.optional]
+    silent: option(bool),
+    [@mel.optional]
+    eol: option(string),
+    [@mel.optional]
+    stderrLevels: option(array(string)),
+    [@mel.optional]
+    consoleWarnLevels: option(array(string)),
   };
-  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newConsoleTransport: config => t = "Console";
+  [@mel.new] [@mel.module "winston"] [@mel.scope "transports"]
+  external newConsoleTransport: config => t = "Console";
 
   let create =
-    (~level=?, ~silent=?, ~eol=?, ~stderrLevels=?, ~consoleWarnLevels=?, ()) =>
-      newConsoleTransport(config(
-        ~level =? level,
-        ~silent =? silent,
-        ~eol =? eol,
-        ~stderrLevels =? stderrLevels -> Belt.Option.map(Belt.List.toArray),
-        ~consoleWarnLevels =? consoleWarnLevels -> Belt.Option.map(Belt.List.toArray),
-        ()
-      ));
+      (~level=?, ~silent=?, ~eol=?, ~stderrLevels=?, ~consoleWarnLevels=?, ()) =>
+    newConsoleTransport(
+      config(
+        ~level?,
+        ~silent?,
+        ~eol?,
+        ~stderrLevels=?stderrLevels->Belt.Option.map(Belt.List.toArray),
+        ~consoleWarnLevels=?
+          consoleWarnLevels->Belt.Option.map(Belt.List.toArray),
+        (),
+      ),
+    );
 };
 let createConsole = Console.create;
 
-module File {
-  [@bs.deriving abstract]
+module File = {
+  [@deriving abstract]
   type config('a) = {
-    [@bs.optional] level: string,
-    [@bs.optional] silent: bool,
-    [@bs.optional] eol: string,
-    [@bs.optional] filename: string,
-    [@bs.optional] maxsize: int,
-    [@bs.optional] maxFiles: int,
-    [@bs.optional] tailable: bool,
-    [@bs.optional] maxRetries: int,
-    [@bs.optional] zippedArchive: bool,
-    [@bs.optional] options: Js.t('a)
+    [@mel.optional]
+    level: option(string),
+    [@mel.optional]
+    silent: option(bool),
+    [@mel.optional]
+    eol: option(string),
+    [@mel.optional]
+    filename: option(string),
+    [@mel.optional]
+    maxsize: option(int),
+    [@mel.optional]
+    maxFiles: option(int),
+    [@mel.optional]
+    tailable: option(bool),
+    [@mel.optional]
+    maxRetries: option(int),
+    [@mel.optional]
+    zippedArchive: option(bool),
+    [@mel.optional]
+    options: option(Js.t('a)),
   };
-  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newFileTransport: config('a) => t = "File";
+  [@mel.new] [@mel.module "winston"] [@mel.scope "transports"]
+  external newFileTransport: config('a) => t = "File";
 
   let create =
-    (~level=?, ~silent=?, ~eol=?, ~filename=?, ~maxsize=?, ~maxFiles=?, ~tailable=?, ~maxRetries=?, ~zippedArchive=?, ~options=?, ()) =>
-      newFileTransport(config(
-        ~level =? level,
-        ~silent =? silent,
-        ~eol =? eol,
-        ~filename =? filename,
-        ~maxsize =? maxsize,
-        ~maxFiles =? maxFiles,
-        ~tailable =? tailable,
-        ~maxRetries =? maxRetries,
-        ~zippedArchive =? zippedArchive,
-        ~options =? options,
-        ()
-      ));
+      (
+        ~level=?,
+        ~silent=?,
+        ~eol=?,
+        ~filename=?,
+        ~maxsize=?,
+        ~maxFiles=?,
+        ~tailable=?,
+        ~maxRetries=?,
+        ~zippedArchive=?,
+        ~options=?,
+        (),
+      ) =>
+    newFileTransport(
+      config(
+        ~level?,
+        ~silent?,
+        ~eol?,
+        ~filename?,
+        ~maxsize?,
+        ~maxFiles?,
+        ~tailable?,
+        ~maxRetries?,
+        ~zippedArchive?,
+        ~options?,
+        (),
+      ),
+    );
 };
 let createFile = File.create;
 
-module Http {
-  [@bs.deriving abstract]
+module Http = {
+  [@deriving abstract]
   type config('a) = {
-    [@bs.optional] host: string,
-    [@bs.optional] port: int,
-    [@bs.optional] path: string,
-    [@bs.optional] auth: Js.t('a),
-    [@bs.optional] ssl: bool
+    [@mel.optional]
+    host: option(string),
+    [@mel.optional]
+    port: option(int),
+    [@mel.optional]
+    path: option(string),
+    [@mel.optional]
+    auth: option(Js.t('a)),
+    [@mel.optional]
+    ssl: option(bool),
   };
-  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newHttpTransport: config('a) => t = "Http";
+  [@mel.new] [@mel.module "winston"] [@mel.scope "transports"]
+  external newHttpTransport: config('a) => t = "Http";
 
-  let create =
-    (~host=?, ~port=?, ~path=?, ~auth=?, ~ssl=?, ()) =>
-      newHttpTransport(config(
-        ~host =? host,
-        ~port =? port,
-        ~path =? path,
-        ~auth =? auth,
-        ~ssl =? ssl,
-        ()
-      ));
+  let create = (~host=?, ~port=?, ~path=?, ~auth=?, ~ssl=?, ()) =>
+    newHttpTransport(config(~host?, ~port?, ~path?, ~auth?, ~ssl?, ()));
 };
 let createHttp = Http.create;
 
-module Stream {
-  [@bs.deriving abstract]
+module Stream = {
+  [@deriving abstract]
   type config('a) = {
-    [@bs.optional] level: string,
-    [@bs.optional] silent: bool,
-    [@bs.optional] eol: string,
-    [@bs.optional] stream: 'a
+    [@mel.optional]
+    level: option(string),
+    [@mel.optional]
+    silent: option(bool),
+    [@mel.optional]
+    eol: option(string),
+    [@mel.optional]
+    stream: option('a),
   };
-  [@bs.new] [@bs.module "winston"] [@bs.scope "transports"] external newStreamTransport: config('a) => t = "Stream";
+  [@mel.new] [@mel.module "winston"] [@mel.scope "transports"]
+  external newStreamTransport: config('a) => t = "Stream";
 
-  let create =
-    (~level=?, ~silent=?, ~eol=?, ~stream=?, ()) =>
-      newStreamTransport(config(
-        ~level =? level,
-        ~silent =? silent,
-        ~eol =? eol,
-        ~stream =? stream,
-        ()
-      ));
+  let create = (~level=?, ~silent=?, ~eol=?, ~stream=?, ()) =>
+    newStreamTransport(config(~level?, ~silent?, ~eol?, ~stream?, ()));
 };
 let createStream = Stream.create;

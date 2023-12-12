@@ -3,3 +3,5 @@
 yarn.lock
 .bsb.lock
 .merlin
+_build
+_opam

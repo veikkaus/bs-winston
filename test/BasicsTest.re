@@ -1,3 +1,6 @@
+// TODO: bs-mocha and reason-future are very old - I won't be updating
+// them any time soon - for tests to run consider switching to melange-jest
+// with relude (and add dune file to this folder). // jakubrpawlowski
 let describe = BsMocha.Mocha.describe;
 open BsMocha.Async;
 module Assert = BsMocha.Assert;

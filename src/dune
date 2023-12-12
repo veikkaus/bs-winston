@@ -1,0 +1,6 @@
+(library
+ (name bsWinston)
+ (public_name bs-winston)
+ (modes melange)
+ (preprocess
+  (pps melange.ppx)))
